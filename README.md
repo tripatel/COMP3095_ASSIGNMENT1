@@ -79,8 +79,8 @@ You can test the functionality of each service using **Postman**.
 2. **Access Each Service**:
    - **User Service**: http://localhost:6004
    - **Room Service**: http://localhost:6003
-   - **Approval Service**: http://localhost:6005
-   - **Booking Service**: http://localhost:6006
+   - **Approval Service**: http://localhost:6001
+   - **Booking Service**: http://localhost:8095
    - **Event Service**: http://localhost:6007
 
 ### 6. Services and Endpoints
