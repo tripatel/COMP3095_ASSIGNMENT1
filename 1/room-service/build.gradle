@@ -1,0 +1,38 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.5'
+	id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.gbceventbooking'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Web for REST APIs
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb' // MongoDB support
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' // Actuator for monitoring
+    compileOnly 'org.projectlombok:lombok' // Lombok to reduce boilerplate code
+    developmentOnly 'org.springframework.boot:spring-boot-devtools' // DevTools for hot-reloading
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Test framework
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}

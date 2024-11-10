@@ -1,0 +1,112 @@
+version: "3.8"
+
+services:
+
+  # New MongoDB Service (mongo2)
+  mongo2:
+    image: mongo:latest
+    container_name: comp3095-mongodb-new
+    ports:
+      - "27019:27017"  # Expose on a different port than the first MongoDB container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data_new:/data/db  # Use a different volume for data persistence
+    networks:
+      - app-network
+
+  # User Service
+  user-service:
+    build:
+      context: UserService
+      dockerfile: ./Dockerfile
+    container_name: user-service
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongo2  # Connects to the new MongoDB container
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: user-service
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: password
+    ports:
+      - "6004:6004"  # Expose on port 6004
+    networks:
+      - app-network
+
+  # Room Service
+  room-service:
+    build:
+      context: ./room-service
+      dockerfile: ./Dockerfile
+    container_name: room-service
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongo2  # Connects to the new MongoDB container
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: room-service
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: password
+    ports:
+      - "6003:6003"  # Expose on port 6003
+    networks:
+      - app-network
+
+  # Booking Service
+  booking-service:
+    build:
+      context: BookingService
+      dockerfile: ./Dockerfile
+    container_name: booking-service
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongo2  # Connects to the new MongoDB container
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: booking-service
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: password
+    ports:
+      - "8095:8095"  # Expose on port 8095
+    networks:
+      - app-network
+
+  # Event Service
+  event-service:
+    build:
+      context: EventService
+      dockerfile: ./Dockerfile
+    container_name: event-service
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongo2  # Connects to the new MongoDB container
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: event-service
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: password
+    ports:
+      - "6006:6006"  # Expose on port 6006
+    networks:
+      - app-network
+
+  # Approval Service
+  approval-service:
+    build:
+      context: ApprovalService
+      dockerfile: ./Dockerfile
+    container_name: approval-service
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongo2  # Connects to the new MongoDB container
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: approval-service
+      SPRING_DATA_MONGODB_USERNAME: admin
+      SPRING_DATA_MONGODB_PASSWORD: password
+    ports:
+      - "6001:6001"  # Expose on port 6001
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_data_new:
+    driver: local
